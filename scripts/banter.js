@@ -573,11 +573,12 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("setup", () => {
-  registerBanterConnectionType();
+  // Connection Manager exposes its API at setup; register our type in ready.
 });
 
 Hooks.once("ready", () => {
   sessionStart = Date.now();
+  registerBanterConnectionType();
   const mod = game.modules.get(MID);
   if (mod) mod.api = { triggerNow, openSettings: () => new BanterSettingsApp().render(true), openProfile: openBanterProfile, costStats };
   if (isActiveGM()) startLoop();
