@@ -437,7 +437,7 @@ class BanterSettingsApp extends ApplicationV2 {
     id: "foundry-banter-settings",
     tag: "div",
     window: { title: "Banter Settings", icon: "fa-solid fa-comments", resizable: true },
-    position: { width: 560, height: "auto" }
+    position: { width: 560, height: 720 }
   };
 
   _connectionOptions() {
