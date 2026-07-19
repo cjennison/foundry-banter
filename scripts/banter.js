@@ -643,6 +643,16 @@ Hooks.on("getSceneControlButtons", (controls) => {
   };
 });
 
+/* Keep the scene-control participation toggle in sync when a player changes
+   their character's participation elsewhere (e.g. the sheet "Join in banter"
+   checkbox). Re-render the controls so the toggle reflects the new state. */
+Hooks.on("updateActor", (actor, changes) => {
+  if (game.user.isGM) return;
+  const touched = foundry.utils.hasProperty(changes, `flags.${MID}.optOut`) ||
+    foundry.utils.hasProperty(changes, `flags.${MID}.-=optOut`);
+  if (touched && actor.type === "character" && actor.isOwner) ui.controls?.render();
+});
+
 /* Add a "Banter" button to the character sheet header for owners. */
 Hooks.on("renderActorSheetV2", (app, html) => {
   const actor = app?.document;
