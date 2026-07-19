@@ -223,7 +223,8 @@ async function deliverBanter(lines, parts) {
     const p = parts.find(x => x.name.toLowerCase() === String(line.speaker).toLowerCase()) || parts[0];
     const tok = canvas.tokens.get(p.tokenId);
     try {
-      if (tok) await canvas.hud.bubbles.broadcast(tok.document, line.text, { cssClasses: ["banter-bubble"] });
+      // pan:false so banter never yanks players' cameras to the speaker.
+      if (tok) await canvas.hud.bubbles.broadcast(tok.document, line.text, { cssClasses: ["banter-bubble"], pan: false });
     } catch (e) { console.warn(`${MID} | bubble failed`, e); }
 
     if (mirror) {
