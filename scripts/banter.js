@@ -228,12 +228,12 @@ async function deliverBanter(lines, parts) {
     } catch (e) { console.warn(`${MID} | bubble failed`, e); }
 
     if (mirror) {
-      const actor = game.actors.get(p.actorId);
-      const speaker = ChatMessage.getSpeaker({ actor, token: tok?.document, scene: canvas.scene });
-      speaker.alias = p.name; // use the character (actor) name, not the token's name
+      // Use an actor-only speaker (no token/scene) so core does NOT spawn its
+      // own IC chat bubble — which would pan every client's camera. Our own
+      // broadcast bubble above already shows over the token with pan:false.
       await ChatMessage.create({
         style: styleIC,
-        speaker,
+        speaker: { actor: p.actorId, alias: p.name },
         content: `<span class="banter-line">${esc(line.text)}</span>`,
         flags: { [MID]: { banter: true } }
       });
