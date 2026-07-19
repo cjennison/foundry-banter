@@ -132,12 +132,23 @@ function feetBetween(a, b) {
   return (px / gs) * gd;
 }
 
+/** A character participates in banter unless its owner has opted it out. */
+function isParticipating(actor) {
+  return !actor?.getFlag(MID, "optOut");
+}
+
+/** Player-character actors the current user owns (for the player opt toggle). */
+function ownedBanterActors() {
+  return game.actors.filter(a => a.type === "character" && a.hasPlayerOwner && a.isOwner);
+}
+
 function eligibleTokens() {
   const toks = canvas?.tokens?.placeables ?? [];
   return toks.filter(t =>
     t.actor &&
     t.actor.type === "character" &&
     t.actor.hasPlayerOwner &&
+    isParticipating(t.actor) &&
     t.document?.hidden !== true &&
     !t.document?.isSecret);
 }
@@ -361,6 +372,7 @@ async function openBanterProfile(actor) {
   const others = game.actors.filter(a => a.id !== actor.id && a.type === "character" && a.hasPlayerOwner);
   const persona = actor.getFlag(MID, "persona") ?? "";
   const relMap = actor.getFlag(MID, "rel") ?? {};
+  const participating = isParticipating(actor);
 
   const rows = others.length
     ? others.map(o => `
@@ -373,6 +385,10 @@ async function openBanterProfile(actor) {
   const content = `
     <div class="banter-profile">
       <p class="notes">Shape how <strong>${esc(actor.name)}</strong> banters. This flavors the ambient quips they trade when standing near other characters.</p>
+      <div class="form-group">
+        <label class="checkbox"><input type="checkbox" name="participate" ${participating ? "checked" : ""}> Join in banter</label>
+        <p class="notes">Uncheck to opt this character out of ambient banter entirely.</p>
+      </div>
       <div class="form-group stacked">
         <label>Banter persona / voice</label>
         <textarea name="persona" rows="3" placeholder="e.g. Terse and dry; clipped sentences; secretly sentimental; hates small talk.">${esc(persona)}</textarea>
@@ -391,7 +407,7 @@ async function openBanterProfile(actor) {
         action: "save", label: "Save", icon: "fa-solid fa-floppy-disk", default: true,
         callback: (event, button) => {
           const f = button.form.elements;
-          const out = { persona: f.persona?.value ?? "" };
+          const out = { persona: f.persona?.value ?? "", participate: !!f.participate?.checked };
           for (const o of others) { const el = f[`rel_${o.id}`]; if (el) out[o.id] = el.value; }
           return out;
         }
@@ -402,6 +418,7 @@ async function openBanterProfile(actor) {
   }).catch(() => null);
 
   if (!res) return;
+  await actor.setFlag(MID, "optOut", !res.participate);
   await actor.setFlag(MID, "persona", (res.persona ?? "").trim());
   const rel = {};
   for (const o of others) { const v = (res[o.id] ?? "").trim(); if (v) rel[o.id] = v; }
@@ -588,21 +605,40 @@ Hooks.once("ready", () => {
   console.log(`${MID} | ready`);
 });
 
-/* Quick GM on/off toggle in the token scene controls. */
+/* Scene-control toggle: GM switches banter on/off globally; a player toggles
+   whether their own character(s) participate. */
 Hooks.on("getSceneControlButtons", (controls) => {
-  if (!game.user.isGM) return;
   const tokens = controls.tokens ?? controls.token;
   if (!tokens?.tools) return;
+
+  if (game.user.isGM) {
+    tokens.tools.banter = {
+      name: "banter",
+      title: "Toggle Banter (GM)",
+      icon: "fa-solid fa-comments",
+      toggle: true,
+      active: !!S("enabled"),
+      order: 900,
+      onChange: (event, active) => {
+        setS("enabled", active);
+        ui.notifications.info(`Banter ${active ? "enabled" : "disabled"} for the table.`);
+      }
+    };
+    return;
+  }
+
+  const mine = ownedBanterActors();
+  if (!mine.length) return;
   tokens.tools.banter = {
     name: "banter",
-    title: "Toggle Banter",
+    title: "Banter participation",
     icon: "fa-solid fa-comments",
     toggle: true,
-    active: !!S("enabled"),
+    active: mine.some(a => isParticipating(a)),
     order: 900,
-    onChange: (event, active) => {
-      setS("enabled", active);
-      ui.notifications.info(`Banter ${active ? "enabled" : "disabled"}.`);
+    onChange: async (event, active) => {
+      await Promise.all(mine.map(a => a.setFlag(MID, "optOut", !active)));
+      ui.notifications.info(`You will ${active ? "now" : "no longer"} join in banter.`);
     }
   };
 });
