@@ -1,0 +1,45 @@
+{
+  "id": "foundry-banter",
+  "title": "Banter",
+  "description": "Harmless, AI-driven ambient roleplay. When two or more player characters are near each other and banter mode is on, they occasionally trade a few short spoken quips as chat bubbles over their tokens (mirrored to the chat log). Banter is grounded in each character's biography and player-authored persona/relationship notes, the scene's tone, and combat state. The GM controls a quick on/off toggle, proximity radius, frequency, and a chaos level, and can view an estimated Azure OpenAI cost report. Generation runs through Connection Manager.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "cjennison",
+      "url": "https://github.com/cjennison"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "relationships": {
+    "requires": [
+      {
+        "id": "connection-manager",
+        "type": "module"
+      }
+    ],
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "3.0.0"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/banter.js"
+  ],
+  "styles": [
+    "styles/banter.css"
+  ],
+  "socket": true,
+  "url": "https://github.com/cjennison/foundry-banter",
+  "manifest": "https://github.com/cjennison/foundry-banter/releases/latest/download/module.json",
+  "download": "https://github.com/cjennison/foundry-banter/releases/latest/download/module.zip",
+  "license": "MIT",
+  "readme": "https://github.com/cjennison/foundry-banter/blob/main/README.md"
+}

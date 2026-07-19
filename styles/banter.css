@@ -1,0 +1,38 @@
+/* Banter — chat bubble + UI styling */
+
+/* Speech bubbles rendered over tokens during banter. */
+.chat-bubble.banter-bubble,
+.bubble.banter-bubble {
+  font-style: italic;
+  border-color: #8a6d3b;
+}
+
+/* Chat-log mirror of a banter line. */
+.banter-line {
+  font-style: italic;
+}
+
+/* Player banter profile dialog */
+.banter-profile .notes { margin: 0 0 0.5rem; }
+.banter-profile h3 { margin: 0.25rem 0 0.5rem; font-size: var(--font-size-14); }
+.banter-profile textarea { width: 100%; resize: vertical; }
+
+/* GM settings + cost report */
+.banter-settings fieldset { margin-bottom: 0.75rem; border: 1px solid var(--color-border-light-tertiary); border-radius: 4px; padding: 0.5rem 0.75rem; }
+.banter-settings legend { font-weight: bold; padding: 0 0.35rem; }
+.banter-settings .b-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.banter-settings .form-group { margin-bottom: 0.4rem; }
+.banter-settings input[type="number"] { width: 100%; }
+.banter-settings .b-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem; }
+
+.banter-cost .banter-cost-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.35rem;
+}
+.banter-cost .banter-cost-grid > div { display: flex; justify-content: space-between; gap: 0.5rem; }
+.banter-cost .k { color: var(--color-text-dark-secondary); }
+.banter-cost .v { font-weight: bold; }
+.banter-cost .v em { font-weight: normal; color: var(--color-text-dark-secondary); }
+.banter-cost button[data-b-reset] { margin-top: 0.25rem; }
