@@ -650,7 +650,7 @@ Hooks.on("updateActor", (actor, changes) => {
   if (game.user.isGM) return;
   const touched = foundry.utils.hasProperty(changes, `flags.${MID}.optOut`) ||
     foundry.utils.hasProperty(changes, `flags.${MID}.-=optOut`);
-  if (touched && actor.type === "character" && actor.isOwner) ui.controls?.render();
+  if (touched && actor.type === "character" && actor.isOwner) ui.controls?.render({ reset: true });
 });
 
 /* Add a "Banter" button to the character sheet header for owners. */
