@@ -229,9 +229,11 @@ async function deliverBanter(lines, parts) {
 
     if (mirror) {
       const actor = game.actors.get(p.actorId);
+      const speaker = ChatMessage.getSpeaker({ actor, token: tok?.document, scene: canvas.scene });
+      speaker.alias = p.name; // use the character (actor) name, not the token's name
       await ChatMessage.create({
         style: styleIC,
-        speaker: ChatMessage.getSpeaker({ actor, token: tok?.document, scene: canvas.scene }),
+        speaker,
         content: `<span class="banter-line">${esc(line.text)}</span>`,
         flags: { [MID]: { banter: true } }
       });
