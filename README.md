@@ -41,14 +41,18 @@ opening settings.
 ### Chaos level
 
 A `1–10` slider controls how wild the banter gets: `1` is mild small talk, `10` is
-absurd, over-the-top ribbing (always good-natured, never grim).
+absurd, over-the-top ribbing — never genuinely mean-spirited. Register is a
+character's own business, though: a persona written as bleak, deadpan or grim is
+played that way rather than being smoothed into someone cheerful.
 
 ## Player setup (per character)
 
 Open your character sheet and click the **Banter** button (speech-bubbles icon) in
 the sheet's title bar. There you can set:
 
-- **Banter persona / voice** — how your character speaks and jokes.
+- **Banter persona / voice** — how your character speaks and jokes. This drives
+  register as well as content: write it as clipped and bleak and they will be
+  played that way, not sanded down into someone chirpy.
 - **Feelings toward other characters** — a short note per other PC, so your
   character can treat each of them differently.
 
